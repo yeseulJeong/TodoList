@@ -10,7 +10,13 @@
 	  "sourceMap": true,
 	  "strict": true,
 	  "moduleResolution": "node",
-	  "module": "ESNext"
+	  "module": "ESNext",
+	  "target": "ES2018",    // 추가
+	  "outDir": "./dist"     // 추가
 	},
-	// "include": ["+server.ts"]
+	"include": ["server.ts"],
+	"ts-node": {
+	  "transpileOnly": true,
+	  "files": true
+	}
   }
