@@ -41,6 +41,8 @@
 	"type": "module",
 	"dependencies": {
 		"@ngrok/ngrok": "^1.4.1",
+		"@supabase/supabase-js": "^2.46.1",
+		"dotenv": "^16.4.5",
 		"express": "^4.21.1",
 		"mysql2": "^3.11.3"
 	}
