@@ -10,7 +10,7 @@
 		const canvas = document.getElementById('TodoChart');
 		const ctx = canvas.getContext('2d');
 
-		// const data = get(todoData);
+		const data = get(todoData);
 
 		const width = canvas.width;
 		const height = canvas.height;
@@ -34,7 +34,7 @@
 			ctx.fillRect(padding + halfWidth, padding + halfHeight, halfWidth, halfHeight);
 
 			// 데이터 포인트 그리기
-			$todoData.forEach(point => {
+			data.forEach(point => {
 				const x = padding + ((point.importance - 5) / 10) * (width - 2 * padding) + halfWidth;
 				const y = height - padding - ((point.urgency - 5) / 10) * (height - 2 * padding) - halfHeight;
 
@@ -59,8 +59,10 @@
 
 			let found = false;
 			$todoData.forEach(point => {
-				const x = padding + ((point.importance / 10) * (width - 2 * padding));
-				const y = height - padding - ((point.urgency / 10) * (height - 2 * padding));
+				const x = padding + ((point.importance - 5) / 10) * (width - 2 * padding) + halfWidth;
+				const y = height - padding - ((point.urgency - 5) / 10) * (height - 2 * padding) - halfHeight;
+
+				// console.log(`Point: (${x}, ${y}), Mouse: (${mouseX}, ${mouseY})`);
 
 				if (Math.abs(mouseX - x) < 8 && Math.abs(mouseY - y) < 8) {
 					let tooltipX = event.clientX;

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { todoData, categories } from '../stores/todoStore';
   import { get } from 'svelte/store';
+  
 
   export let modalControl: (value: boolean) => void;
 
@@ -26,10 +27,8 @@
     }
   }
 
-  function addTodo() {
-    console.log('addTodo'); // 함수 호출 확인용 로그
-    console.log(name, importance, urgency, deadline, memo, category); // 입력값 확인용 로그
-    const todo = {
+  async function addTodo() {
+      const todo = {
       name,
       importance,
       urgency,
@@ -38,19 +37,36 @@
       category,
       completed,
     };
-    todoData.update((data) => {
-    const updatedData = [...data, todo];
-    console.log('업데이트된 todoData:', updatedData); // 업데이트된 데이터 로그
-    return updatedData;
-  });
-    modalControl(false);
-    name = '';
-    importance = 5;
-    urgency = 5;
-    deadline = '';
-    memo = '';
-    category = '';
-    completed = false;
+    if(todo.name === '') {
+      alert('할 일을 입력해주세요.');
+      return;
+    } else if(todo.category === '') {
+      alert('분류를 선택해주세요.');
+      return;
+    } else {
+      const response = await fetch('/api/todo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(todo),
+      });
+      if(response.ok) {
+        modalControl(false);
+        name = '';
+        importance = 5;
+        urgency = 5;
+        deadline = '';
+        memo = '';
+        category = '';
+        completed = false;
+      } else if(!response.ok) {
+        alert('할 일 추가에 실패했습니다.' );
+
+      }
+      
+    }
+
   }
 
   // 스토어 값 변경 시 로그 출력

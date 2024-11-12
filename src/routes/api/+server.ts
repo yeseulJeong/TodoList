@@ -24,4 +24,19 @@ export async function GET() {
     console.log('Data:', data);
     return json(data);
   }
-  }
+}
+
+export async function POST(request) {
+    const { description } = request.json();
+    const { data, error } = await supabase
+        .from('todos')
+        .insert([{ description }]);
+    
+    if (error) {
+        console.error('Error inserting data:', error);
+        return json({ error: 'Error inserting data' });
+    } else {
+        console.log('Data:', data);
+        return new Response(JSON.stringify(data), {status: 201});
+    }
+}
