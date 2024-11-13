@@ -3,29 +3,30 @@ import { writable } from 'svelte/store';
 export const todoData = writable([]);
 export const categories = writable(['추가', '기타']);
 
-// 초기 데이터 로드
-// const fetchTodoData = async () => {
-// 	try {
-// 		const response = await fetch('/api');
-// 		const data = await response.json();
-// 		todoData.set(data);
-// 	} catch (error) {
-// 		console.error('할 일 데이터를 가져오는데 실패했습니다:', error);
-// 	}
-// };
-
 const fetchTodoData = async () => {
 	try {
 		const response = await fetch('/api');
 		if (!response.ok) {
-			throw new Error('할 일 데이터를 가져오는데 실패했습니다.');
+			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		const data = await response.json();
-		todoData.set(data);
+
+		if (data.error) {
+			console.error('API 에러:', data.error);
+			todoData.set([]);
+			return;
+		}
+
+		if (Array.isArray(data)) {
+			todoData.set(data);
+		} else {
+			console.error('예상치 못한 데이터 형식:', data);
+			todoData.set([]);
+		}
 	} catch (error) {
-		console.error('할 일 데이터를 가져오는데 실패했습니다:', error);
+		console.error('데이터 가져오기 실패:', error);
+		todoData.set([]);
 	}
 };
 
-// 앱 시작시 데이터 로드
 fetchTodoData();
