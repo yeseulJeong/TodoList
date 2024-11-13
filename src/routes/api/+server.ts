@@ -1,42 +1,25 @@
-import {json} from '@sveltejs/kit';
-// import conn from '$lib/db'
-// import conn from '../../lib/db'
-
-// export async function GET() {
-//     const result = await conn.query('SELECT * FROM todos;');
-//     // console.log('result', result);
-   
-//     return json(result[0])
-// }
-
-// import { supabase } from '$lib/supabaseClient';
+import { json } from '@sveltejs/kit';
 import { supabase } from '../../lib/supabaseClient';
 
 export async function GET() {
-  const { data, error } = await supabase
-    .from('todos')
-    .select('*');
+	try {
+		const { data, error } = await supabase.from('todos').select('*');
 
-  if (error) {
-    console.error('Error fetching data:', error);
-    return json({ error: 'Error fetching data' });
-  } else {
-    console.log('Data:', data);
-    return json(data);
-  }
-}
+		if (error) {
+			console.error('Supabase 에러:', error);
+			return new Response(JSON.stringify({ error: error.message }), {
+				status: 500,
+				headers: { 'Content-Type': 'application/json' }
+			});
+		}
 
-export async function POST(request) {
-    const { description } = request.json();
-    const { data, error } = await supabase
-        .from('todos')
-        .insert([{ description }]);
-    
-    if (error) {
-        console.error('Error inserting data:', error);
-        return json({ error: 'Error inserting data' });
-    } else {
-        console.log('Data:', data);
-        return new Response(JSON.stringify(data), {status: 201});
-    }
+		// 데이터가 없을 경우 빈 배열 반환
+		return json(data || []);
+	} catch (err) {
+		console.error('서버 에러:', err);
+		return new Response(JSON.stringify({ error: '서버 에러가 발생했습니다.' }), {
+			status: 500,
+			headers: { 'Content-Type': 'application/json' }
+		});
+	}
 }
