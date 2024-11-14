@@ -13,6 +13,7 @@
   let category = '';
   let newCategory = '';
   let completed = false;
+  let user_id = '1'
 
   function addCategory() {
     categories.update((data) => [...data, newCategory]);
@@ -36,7 +37,12 @@
       memo,
       category,
       completed,
+      user_id
     };
+    if(todo.deadline === '') {
+      todo.deadline = null;                     
+    } 
+
     if(todo.name === '') {
       alert('할 일을 입력해주세요.');
       return;
@@ -50,7 +56,9 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(todo),
+
       });
+      console.log('addpopop에서 보내고있어:',todo)
       if(response.ok) {
         modalControl(false);
         name = '';
