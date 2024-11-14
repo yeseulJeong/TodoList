@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://wcfwglecbwhcsffjjkrj.supabase.co';
-const supabaseKey = import.meta.env.VITE_NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseKey = import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 // const supabaseKey = process.env.VITE_NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
