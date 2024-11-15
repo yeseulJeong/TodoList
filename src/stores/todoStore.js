@@ -1,51 +1,32 @@
 import { writable } from 'svelte/store';
 
-export const todoData = writable([
-	{
-		name: 'Todo',
-		importance: 10,
-		urgency: 5,
-		deadline: '2021-12-31',
-		memo: '',
-		category: '',
-		completed: false
-	},
-	{
-		name: '밥먹기',
-		importance: 3,
-		urgency: 8,
-		deadline: '2021-12-31',
-		memo: '',
-		category: '',
-		completed: false
-	},
-	{
-		name: '숨쉬기',
-		importance: 1,
-		urgency: 10,
-		deadline: '2021-12-31',
-		memo: '',
-		category: '',
-		completed: false
-	},
-	{
-		name: '물마시기',
-		importance: 2,
-		urgency: 9,
-		deadline: '2021-12-31',
-		memo: '',
-		category: '',
-		completed: false
-	},
-	{
-		name: '잠자기',
-		importance: 4,
-		urgency: 7,
-		deadline: '2021-12-31',
-		memo: '',
-		category: '',
-		completed: false
-	}
-]);
-
+export const todoData = writable([]);
 export const categories = writable(['추가', '기타']);
+
+const fetchTodoData = async () => {
+	try {
+		const response = await fetch('/api');
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`);
+		}
+		const data = await response.json();
+
+		if (data.error) {
+			console.error('API 에러:', data.error);
+			todoData.set([]);
+			return;
+		}
+
+		if (Array.isArray(data)) {
+			todoData.set(data);
+		} else {
+			console.error('예상치 못한 데이터 형식:', data);
+			todoData.set([]);
+		}
+	} catch (error) {
+		console.error('데이터 가져오기 실패:', error);
+		todoData.set([]);
+	}
+};
+
+fetchTodoData();

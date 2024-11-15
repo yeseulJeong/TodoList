@@ -26,13 +26,13 @@
 						<input type="checkbox" checked={todo.completed} on:change={() => toggleComplete(index)} />
 						<div class="name">{todo.name}</div>
 					</div>
-          <div class="category">{todo.category}</div>
+          <div class="category">{todo.category != undefined ? todo.category : ""}</div>
 					<button class="delete-button" on:click={() => deleteTodo(index)}>삭제</button>
         </div>
         <div class="todo-details">
           <div class="importance">중요도: {todo.importance}</div>
           <div class="urgency">긴급도: {todo.urgency}</div>
-          <div class="deadline">마감일: {todo.deadline}</div>
+          <div class="deadline">{todo.deadline != null ? "마감일: "+ todo.deadline : "" }</div>
         </div>
         <div class="memo">{todo.memo}</div>
           
