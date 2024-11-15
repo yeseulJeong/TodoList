@@ -1,6 +1,5 @@
 import { json, RequestHandler } from '@sveltejs/kit';
 import { supabase } from '../../lib/supabaseClient';
-import { supabaseServer } from '../../lib/supabaseServer';
 
 export async function GET() {
 	try {
