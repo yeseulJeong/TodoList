@@ -1,9 +1,8 @@
-import { json, RequestHandler } from '@sveltejs/kit';
-import { supabase } from '../../lib/supabaseClient';
-
+import { json } from '@sveltejs/kit';
+import {supabaseServer} from '$lib/supabaseServer';
 export async function GET() {
 	try {
-		const { data, error } = await supabase.from('todos').select('*');
+		const { data, error } = await supabaseServer.from('todos').select('*');
 
 		if (error) {
 			console.error('Supabase 에러:', error);

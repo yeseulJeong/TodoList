@@ -1,21 +1,40 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
 	import AddPopup from './addPopup.svelte';
-
+	export async function load(locals) {
+		return {
+			props: {
+				user: locals.user
+			}
+		}
+	};
+	
+	async function logout() {
+		const res = await fetch('/api/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		if (res.ok) {
+			window.location.replace('/login');
+		}
+	}
 	let isModalOpen = false;
 
 	function modalControl(value: boolean) {
 		isModalOpen = value;
 		console.log(isModalOpen);
 	}
+	export let user;
+
+	
 
 </script>
 
 <header>
 	
-<h2>TodoTitle</h2>
+<h2>{user}'s TodoTitle</h2>
 	<button on:click={()=>modalControl(true)}>추가</button>
 </header>
 

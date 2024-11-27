@@ -10,8 +10,25 @@
     });
   }
 
-  function deleteTodo(index: number) {
-    todoData.update(todos => todos.filter((_, i) => i !== index));
+  async function deleteTodo(id: number) {
+    try {
+      const response = await fetch('/api/todo', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id}),
+      });
+      if(response.ok) {
+        todoData.update(todos => todos.filter(todo => todo.id !== id));
+      } else {
+        const errorData = await response.json();
+        console.error('할 일 삭제에 실패했습니다.', errorData.error);
+      }
+    } catch (error) {
+      console.error('할 일 삭제 중 오류 발생:', error);
+    }
+
   }
 
   
@@ -27,7 +44,7 @@
 						<div class="name">{todo.name}</div>
 					</div>
           <div class="category">{todo.category != undefined ? todo.category : ""}</div>
-					<button class="delete-button" on:click={() => deleteTodo(index)}>삭제</button>
+					<button class="delete-button" on:click={() => deleteTodo(todo.id)}>삭제</button>
         </div>
         <div class="todo-details">
           <div class="importance">중요도: {todo.importance}</div>
